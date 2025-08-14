@@ -1,0 +1,8 @@
+# ls command configuration for dox
+# Place this file at ~/.config/dox/commands/ls.yaml
+image: busybox:latest
+volumes:
+  # Mount current directory to workspace.
+  - .:/workspace
+# Override the command to ls since busybox uses sh by default.
+command: ls

@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(go mod init:*)",
+      "Bash(mkdir:*)",
+      "Bash(go mod:*)",
+      "Bash(make:*)",
+      "Bash(go test:*)",
+      "Bash(./build/dox version)",
+      "Bash(./build/dox:*)",
+      "Bash(cat:*)",
+      "Bash(go run:*)",
+      "Bash(pkill:*)",
+      "Bash(docker run:*)",
+      "Bash(docker rmi:*)",
+      "WebSearch",
+      "Bash(go build:*)",
+      "Bash(chmod:*)",
+      "Bash(timeout:*)",
+      "Bash(docker inspect:*)"
+    ],
+    "deny": [],
+    "ask": [],
+    "additionalDirectories": [
+      "/home/stavros/.config/dox/commands"
+    ]
+  }
+}

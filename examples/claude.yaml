@@ -1,0 +1,61 @@
+# Claude Code configuration for dox
+# Place this file at ~/.config/dox/commands/claude.yaml
+build:
+  dockerfile_inline: |
+    FROM ubuntu:24.04
+
+    # Install essential dependencies.
+    RUN apt-get update && apt-get install -y \
+        curl \
+        git \
+        vim \
+        build-essential \
+        python3 \
+        python3-pip \
+        python3-venv \
+        ripgrep \
+        jq \
+        wget \
+        && rm -rf /var/lib/apt/lists/*
+
+    # Install Node.js 20.x LTS.
+    RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+        apt-get install -y nodejs
+
+    # Configure npm for global packages.
+    RUN mkdir -p /home/ubuntu/.npm-global && \
+        npm config set prefix '/home/ubuntu/.npm-global' && \
+        echo 'export PATH="/home/ubuntu/.npm-global/bin:$PATH"' >> /home/ubuntu/.bashrc
+
+    # Install Claude Code CLI.
+    ENV PATH="/home/ubuntu/.npm-global/bin:${PATH}"
+    RUN npm install -g @anthropic-ai/claude-code
+
+    # Set up working directory.
+    WORKDIR /workspace
+
+    # Use claude as the entrypoint.
+    ENTRYPOINT ["claude"]
+
+volumes:
+  # Mount Claude configuration directory.
+  - ${HOME}/.claude/:/home/ubuntu/.claude/
+  # Mount Claude configuration directory.
+  - ${HOME}/.claude.json:/home/ubuntu/.claude.json
+  # Mount git config.
+  - ${HOME}/.gitconfig:/home/ubuntu/.gitconfig:ro
+  # Mount npm cache.
+  - ${HOME}/.npm:/home/ubuntu/.npm
+
+environment:
+  # Terminal settings.
+  - TERM
+  - LANG
+  - LC_ALL
+  # Editor preference.
+  - EDITOR
+  # Git environment.
+  - GIT_AUTHOR_NAME
+  - GIT_AUTHOR_EMAIL
+  - GIT_COMMITTER_NAME
+  - GIT_COMMITTER_EMAIL
