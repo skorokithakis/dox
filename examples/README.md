@@ -20,16 +20,16 @@ Once configured, you can run Claude Code in a container:
 
 ```bash
 # Interactive mode
-dox claude
+dox run claude
 
 # With specific command
-dox claude "help me write a function to calculate fibonacci numbers"
+dox run claude "help me write a function to calculate fibonacci numbers"
 
 # Use claude with current directory mounted
-dox claude "analyze the code in this directory"
+dox run claude "analyze the code in this directory"
 
 # Resume a previous session
-dox claude --resume
+dox run claude --resume
 ```
 
 ### ls command
@@ -38,16 +38,16 @@ A simple ls replacement that runs in a minimal container:
 
 ```bash
 # List files in current directory
-dox ls
+dox run ls
 
 # List with options
-dox ls -la
+dox run ls -la
 
 # List specific directory
-dox ls /workspace/src
+dox run ls /workspace/src
 
 # List with human-readable sizes
-dox ls -lh
+dox run ls -lh
 ```
 
 ## Advanced examples
@@ -66,8 +66,8 @@ environment:
 
 Usage:
 ```bash
-dox python3.12 -m venv .venv
-dox python3.12 script.py
+dox run python3.12 -m venv .venv
+dox run python3.12 script.py
 ```
 
 ### Rust development
@@ -85,9 +85,9 @@ environment:
 
 Usage:
 ```bash
-dox cargo build --release
-dox cargo test
-dox cargo clippy
+dox run cargo build --release
+dox run cargo test
+dox run cargo clippy
 ```
 
 ### AWS CLI
@@ -109,9 +109,9 @@ command: aws
 
 Usage:
 ```bash
-dox aws s3 ls
-dox aws ec2 describe-instances
-dox aws lambda list-functions
+dox run aws s3 ls
+dox run aws ec2 describe-instances
+dox run aws lambda list-functions
 ```
 
 ### Terraform
@@ -129,9 +129,9 @@ environment:
 
 Usage:
 ```bash
-dox terraform init
-dox terraform plan
-dox terraform apply
+dox run terraform init
+dox run terraform plan
+dox run terraform apply
 ```
 
 ## Tips

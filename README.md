@@ -52,8 +52,8 @@ EOF
 
 3. Run Python through dox:
 ```bash
-dox python script.py
-dox python -c "print('Hello from container!')"
+dox run python script.py
+dox run python -c "print('Hello from container!')"
 ```
 
 ## Configuration
@@ -124,9 +124,9 @@ environment:
 
 Usage:
 ```bash
-dox python script.py
-dox python -m pip install requests
-dox python -c "import sys; print(sys.version)"
+dox run python script.py
+dox run python -m pip install requests
+dox run python -c "import sys; print(sys.version)"
 ```
 
 ### Node.js with Custom Build
@@ -149,8 +149,8 @@ environment:
 
 Usage:
 ```bash
-dox node index.js
-dox node -e "console.log(process.version)"
+dox run node index.js
+dox run node -e "console.log(process.version)"
 ```
 
 ### Go Development
@@ -170,9 +170,9 @@ environment:
 
 Usage:
 ```bash
-dox go build ./...
-dox go test -v ./...
-dox go mod tidy
+dox run go build ./...
+dox run go test -v ./...
+dox run go mod tidy
 ```
 
 ## Advanced Features
@@ -188,15 +188,15 @@ dox go mod tidy
 
 Dox forwards all signals to the containerized process:
 ```bash
-dox sleep 30  # Can be interrupted with Ctrl+C
+dox run sleep 30  # Can be interrupted with Ctrl+C
 ```
 
 ### Concurrent Execution
 
 Multiple instances of the same command can run simultaneously:
 ```bash
-dox python server.py &
-dox python client.py
+dox run python server.py &
+dox run python client.py
 ```
 
 ## Troubleshooting

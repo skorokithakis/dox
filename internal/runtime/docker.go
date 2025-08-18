@@ -48,15 +48,26 @@ func (r *DockerRuntime) IsAvailable(ctx context.Context) error {
 }
 
 // ExecuteCommand runs a command in a Docker container.
-func (r *DockerRuntime) ExecuteCommand(ctx context.Context, cfg *config.CommandConfig, command string, args []string, stdin io.Reader, stdout, stderr io.Writer) (int, error) {
+func (r *DockerRuntime) ExecuteCommand(ctx context.Context, cfg *config.CommandConfig, command string, args []string, upgrade bool, stdin io.Reader, stdout, stderr io.Writer) (int, error) {
 	// Build image if inline Dockerfile is provided.
 	if cfg.Build != nil && cfg.Build.DockerfileInline != "" {
 		imageName := fmt.Sprintf("dox-%s:latest", command)
 		
 		// Check if image already exists.
 		_, _, err := r.client.ImageInspectWithRaw(ctx, imageName)
-		if err != nil {
-			// Image doesn't exist, build it.
+		imageExists := err == nil
+		
+		if upgrade && imageExists {
+			// Remove the existing image to force rebuild.
+			logrus.Infof("Removing existing image %s for rebuild...", imageName)
+			if err := r.RemoveImage(ctx, imageName); err != nil {
+				logrus.Warnf("Failed to remove existing image: %v", err)
+			}
+			imageExists = false
+		}
+		
+		if !imageExists {
+			// Image doesn't exist or was removed, build it.
 			logrus.Infof("Building image %s from inline Dockerfile...", imageName)
 			if err := r.BuildImage(ctx, cfg.Build.DockerfileInline, imageName); err != nil {
 				return 1, err
@@ -114,6 +125,14 @@ func (r *DockerRuntime) ExecuteCommand(ctx context.Context, cfg *config.CommandC
 
 	networkConfig := &network.NetworkingConfig{}
 
+	// Force pull if upgrade flag is set and it's not a locally built image.
+	if upgrade && (cfg.Build == nil || cfg.Build.DockerfileInline == "") {
+		logrus.Infof("Pulling latest version of image %s...", cfg.Image)
+		if pullErr := r.PullImage(ctx, cfg.Image); pullErr != nil {
+			logrus.Warnf("Failed to pull latest image: %v. Using existing image if available.", pullErr)
+		}
+	}
+	
 	resp, err := r.client.ContainerCreate(ctx, containerConfig, hostConfig, networkConfig, nil, "")
 	if err != nil {
 		// Try to pull the image if it doesn't exist locally.

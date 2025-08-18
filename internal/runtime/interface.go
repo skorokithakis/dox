@@ -10,7 +10,7 @@ import (
 // Runtime defines the interface for container runtimes.
 type Runtime interface {
 	// ExecuteCommand runs a command in a container.
-	ExecuteCommand(ctx context.Context, config *config.CommandConfig, command string, args []string, stdin io.Reader, stdout, stderr io.Writer) (int, error)
+	ExecuteCommand(ctx context.Context, config *config.CommandConfig, command string, args []string, upgrade bool, stdin io.Reader, stdout, stderr io.Writer) (int, error)
 	
 	// PullImage pulls a container image.
 	PullImage(ctx context.Context, image string) error

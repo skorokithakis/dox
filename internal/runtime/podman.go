@@ -31,14 +31,31 @@ func (r *PodmanRuntime) IsAvailable(ctx context.Context) error {
 }
 
 // ExecuteCommand runs a command in a Podman container.
-func (r *PodmanRuntime) ExecuteCommand(ctx context.Context, cfg *config.CommandConfig, command string, args []string, stdin io.Reader, stdout, stderr io.Writer) (int, error) {
+func (r *PodmanRuntime) ExecuteCommand(ctx context.Context, cfg *config.CommandConfig, command string, args []string, upgrade bool, stdin io.Reader, stdout, stderr io.Writer) (int, error) {
 	// Build image if inline Dockerfile is provided.
 	if cfg.Build != nil && cfg.Build.DockerfileInline != "" {
 		imageName := fmt.Sprintf("dox-%s:latest", command)
+		
+		if upgrade {
+			// Remove existing image to force rebuild.
+			logrus.Infof("Removing existing image %s for rebuild...", imageName)
+			removeCmd := exec.CommandContext(ctx, "podman", "rmi", imageName)
+			if err := removeCmd.Run(); err != nil {
+				// Image might not exist, which is fine.
+				logrus.Debugf("Image removal failed (might not exist): %v", err)
+			}
+		}
+		
 		if err := r.BuildImage(ctx, cfg.Build.DockerfileInline, imageName); err != nil {
 			return 1, err
 		}
 		cfg.Image = imageName
+	} else if upgrade {
+		// Force pull if upgrade flag is set and it's not a locally built image.
+		logrus.Infof("Pulling latest version of image %s...", cfg.Image)
+		if err := r.PullImage(ctx, cfg.Image); err != nil {
+			logrus.Warnf("Failed to pull latest image: %v. Using existing image if available.", err)
+		}
 	}
 
 	// Prepare Podman run arguments.
