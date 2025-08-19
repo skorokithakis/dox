@@ -17,7 +17,12 @@
       "Bash(go build:*)",
       "Bash(chmod:*)",
       "Bash(timeout:*)",
-      "Bash(docker inspect:*)"
+      "Bash(docker inspect:*)",
+      "Bash(git symbolic-ref:*)",
+      "Bash(git describe:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git checkout:*)",
+      "WebFetch(domain:github.com)"
     ],
     "deny": [],
     "ask": [],

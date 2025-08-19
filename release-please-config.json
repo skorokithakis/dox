@@ -1,0 +1,17 @@
+{
+  "packages": {
+    ".": {
+      "release-type": "go",
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": true,
+      "versioning": "default",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "internal/cli/root.go",
+          "glob": "version = \"{version}\""
+        }
+      ]
+    }
+  }
+}
