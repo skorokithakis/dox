@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/skorokithakis/dox/compare/v0.1.0...v0.1.1) (2025-08-19)
+
+
+### Bug Fixes
+
+* Update repo name ([b7c2a8b](https://github.com/skorokithakis/dox/commit/b7c2a8b60259e41b909cceb5e44c596a8971e392))
+
 ## 0.1.0 (2025-08-19)
 
 
