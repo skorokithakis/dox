@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/skorokithakis/dox/compare/v0.1.1...v0.1.2) (2025-08-19)
+
+
+### Bug Fixes
+
+* Fix terminal window size not being passed to the container ([d186929](https://github.com/skorokithakis/dox/commit/d186929c987defc078cccfe96ffc0886dee5110f))
+
 ## [0.1.1](https://github.com/skorokithakis/dox/compare/v0.1.0...v0.1.1) (2025-08-19)
 
 
