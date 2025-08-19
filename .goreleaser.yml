@@ -58,6 +58,7 @@ changelog:
       - "^ci:"
 
 release:
+  target_commitish: master
   github:
     owner: stavros
     name: dox
