@@ -4,7 +4,7 @@
 BINARY_NAME=dox
 BUILD_DIR=build
 VERSION=$(shell git describe --tags --always --dirty 2>/dev/null || echo "dev")
-LDFLAGS=-ldflags "-X github.com/stavros/dox/internal/cli.version=$(VERSION)"
+LDFLAGS=-ldflags "-X github.com/skorokithakis/dox/internal/cli.version=$(VERSION)"
 
 # Default target
 all: build
@@ -13,7 +13,7 @@ all: build
 build:
 	@echo "Building $(BINARY_NAME)..."
 	@mkdir -p $(BUILD_DIR)
-	go build $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME) cmd/dox/main.go
+	go build $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME) main.go
 
 # Clean build artifacts
 clean:

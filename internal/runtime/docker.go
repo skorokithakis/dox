@@ -17,8 +17,8 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/docker/docker/pkg/stdcopy"
 	"github.com/sirupsen/logrus"
-	"github.com/stavros/dox/internal/config"
-	"github.com/stavros/dox/internal/utils"
+	"github.com/skorokithakis/dox/internal/config"
+	"github.com/skorokithakis/dox/internal/utils"
 )
 
 // DockerRuntime implements the Runtime interface for Docker.

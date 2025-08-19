@@ -18,7 +18,7 @@ Dox is a lightweight wrapper utility that transparently executes commands within
 ### From Source
 
 ```bash
-git clone https://github.com/stavros/dox.git
+git clone https://github.com/skorokithakis/dox.git
 cd dox
 make build
 sudo cp build/dox /usr/local/bin/

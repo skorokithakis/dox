@@ -25,7 +25,11 @@
       "WebFetch(domain:github.com)",
       "Bash(gh pr:*)",
       "Bash(git fetch:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run watch:*)",
+      "Bash(gh repo view:*)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": [],

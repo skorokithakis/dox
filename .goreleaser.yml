@@ -21,7 +21,7 @@ builds:
     goarm:
       - "7"
     ldflags:
-      - -s -w -X github.com/stavros/dox/internal/cli.version={{.Version}}
+      - -s -w -X github.com/skorokithakis/dox/internal/cli.version={{.Version}}
     mod_timestamp: "{{ .CommitTimestamp }}"
 
 archives:
@@ -60,11 +60,11 @@ changelog:
 release:
   target_commitish: master
   github:
-    owner: stavros
+    owner: skorokithakis
     name: dox
   draft: false
   prerelease: auto
   mode: append
   footer: |
     ---
-    **Full Changelog**: https://github.com/stavros/dox/compare/{{ .PreviousTag }}...{{ .Tag }}
+    **Full Changelog**: https://github.com/skorokithakis/dox/compare/{{ .PreviousTag }}...{{ .Tag }}

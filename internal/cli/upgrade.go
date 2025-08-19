@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/stavros/dox/internal/config"
-	"github.com/stavros/dox/internal/runtime"
+	"github.com/skorokithakis/dox/internal/config"
+	"github.com/skorokithakis/dox/internal/runtime"
 )
 
 // newUpgradeCommand creates the upgrade command.

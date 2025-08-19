@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/stavros/dox/internal/cli"
+	"github.com/skorokithakis/dox/internal/cli"
 )
 
 func main() {

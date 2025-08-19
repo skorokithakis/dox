@@ -5,7 +5,7 @@ import (
 	"sort"
 
 	"github.com/spf13/cobra"
-	"github.com/stavros/dox/internal/config"
+	"github.com/skorokithakis/dox/internal/config"
 )
 
 // newListCommand creates the list command.

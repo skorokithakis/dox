@@ -4,7 +4,7 @@ import (
 	"context"
 	"io"
 
-	"github.com/stavros/dox/internal/config"
+	"github.com/skorokithakis/dox/internal/config"
 )
 
 // Runtime defines the interface for container runtimes.

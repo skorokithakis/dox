@@ -9,8 +9,8 @@ import (
 	"strings"
 
 	"github.com/sirupsen/logrus"
-	"github.com/stavros/dox/internal/config"
-	"github.com/stavros/dox/internal/utils"
+	"github.com/skorokithakis/dox/internal/config"
+	"github.com/skorokithakis/dox/internal/utils"
 )
 
 // PodmanRuntime implements the Runtime interface for Podman.

@@ -1,4 +1,4 @@
-module github.com/stavros/dox
+module github.com/skorokithakis/dox
 
 go 1.21
 
