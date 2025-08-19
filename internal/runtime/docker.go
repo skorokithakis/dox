@@ -123,6 +123,12 @@ func (r *DockerRuntime) ExecuteCommand(ctx context.Context, cfg *config.CommandC
 		Binds:       volumes,
 	}
 
+	// Set terminal size if TTY is enabled
+	if containerConfig.Tty {
+		width, height := utils.GetTerminalSize()
+		hostConfig.ConsoleSize = [2]uint{uint(height), uint(width)}
+	}
+
 	networkConfig := &network.NetworkingConfig{}
 
 	// Force pull if upgrade flag is set and it's not a locally built image.

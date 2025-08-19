@@ -29,7 +29,9 @@
       "Bash(gh run list:*)",
       "Bash(gh run watch:*)",
       "Bash(gh repo view:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(go doc:*)",
+      "Bash(podman run:*)"
     ],
     "deny": [],
     "ask": [],

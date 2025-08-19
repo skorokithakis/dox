@@ -61,6 +61,11 @@ func (r *PodmanRuntime) ExecuteCommand(ctx context.Context, cfg *config.CommandC
 	// Prepare Podman run arguments.
 	podmanArgs := []string{"run", "--rm", "-it"}
 
+	// Set terminal size if TTY is enabled
+	width, height := utils.GetTerminalSize()
+	podmanArgs = append(podmanArgs, fmt.Sprintf("--env=COLUMNS=%d", width))
+	podmanArgs = append(podmanArgs, fmt.Sprintf("--env=LINES=%d", height))
+
 	// Network mode.
 	podmanArgs = append(podmanArgs, "--network=host")
 

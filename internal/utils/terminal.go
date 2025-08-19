@@ -6,6 +6,17 @@ import (
 	"golang.org/x/term"
 )
 
+// GetTerminalSize returns the current terminal width and height.
+// Returns 0, 0 if the terminal size cannot be determined.
+func GetTerminalSize() (width, height int) {
+	width, height, err := term.GetSize(int(os.Stdout.Fd()))
+	if err != nil {
+		// Default to standard terminal size if we can't get the actual size
+		return 80, 24
+	}
+	return width, height
+}
+
 // SetupTerminal configures the terminal for raw mode if TTY is detected.
 // Returns the original terminal state to be restored later.
 func SetupTerminal() (*term.State, error) {
