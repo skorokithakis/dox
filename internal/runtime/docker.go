@@ -110,12 +110,17 @@ func (r *DockerRuntime) ExecuteCommand(ctx context.Context, cfg *config.CommandC
 		Cmd:          cmd,
 		Env:          env,
 		User:         user,
-		WorkingDir:   "/workspace",
 		AttachStdin:  true,
 		AttachStdout: true,
 		AttachStderr: true,
 		OpenStdin:    true,
 		Tty:          isTerminal(),
+	}
+
+	// Only set working directory if no inline Dockerfile is provided.
+	// When using inline Dockerfile, let the WORKDIR instruction in the Dockerfile take precedence.
+	if cfg.Build == nil || cfg.Build.DockerfileInline == "" {
+		containerConfig.WorkingDir = "/workspace"
 	}
 
 	hostConfig := &container.HostConfig{

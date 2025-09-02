@@ -83,8 +83,11 @@ func (r *PodmanRuntime) ExecuteCommand(ctx context.Context, cfg *config.CommandC
 	gid := os.Getgid()
 	podmanArgs = append(podmanArgs, fmt.Sprintf("--user=%d:%d", uid, gid))
 
-	// Working directory.
-	podmanArgs = append(podmanArgs, "-w", "/workspace")
+	// Only set working directory if no inline Dockerfile is provided.
+	// When using inline Dockerfile, let the WORKDIR instruction in the Dockerfile take precedence.
+	if cfg.Build == nil || cfg.Build.DockerfileInline == "" {
+		podmanArgs = append(podmanArgs, "-w", "/workspace")
+	}
 
 	// Volume mounts - always mount current directory.
 	cwd, _ := os.Getwd()
