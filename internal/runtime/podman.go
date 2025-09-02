@@ -148,9 +148,10 @@ func (r *PodmanRuntime) ExecuteCommand(ctx context.Context, cfg *config.CommandC
 // PullImage pulls a Podman image.
 func (r *PodmanRuntime) PullImage(ctx context.Context, image string) error {
 	cmd := exec.CommandContext(ctx, "podman", "pull", image)
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		return fmt.Errorf("failed to pull image %s: %w\nOutput: %s", image, err, output)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("failed to pull image %s: %w", image, err)
 	}
 	return nil
 }
@@ -173,9 +174,10 @@ func (r *PodmanRuntime) BuildImage(ctx context.Context, dockerfileContent string
 
 	// Build the image.
 	cmd := exec.CommandContext(ctx, "podman", "build", "-t", tag, "-f", tmpfile.Name(), ".")
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		return fmt.Errorf("failed to build image: %w\nOutput: %s", err, output)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("failed to build image: %w", err)
 	}
 
 	return nil

@@ -251,9 +251,34 @@ func (r *DockerRuntime) PullImage(ctx context.Context, imageName string) error {
 	}
 	defer reader.Close()
 
-	// Read the output to ensure the pull completes.
-	_, err = io.Copy(io.Discard, reader)
-	return err
+	// Stream the pull output to stdout while reading it.
+	decoder := json.NewDecoder(reader)
+	for {
+		var msg map[string]interface{}
+		if err := decoder.Decode(&msg); err != nil {
+			if err == io.EOF {
+				break
+			}
+			return fmt.Errorf("failed to decode pull output: %w", err)
+		}
+
+		// Display pull progress.
+		if status, ok := msg["status"].(string); ok {
+			if progress, ok := msg["progress"].(string); ok && progress != "" {
+				fmt.Fprintf(os.Stdout, "%s: %s\r", status, progress)
+			} else if id, ok := msg["id"].(string); ok && id != "" {
+				fmt.Fprintf(os.Stdout, "%s: %s\n", id, status)
+			} else {
+				fmt.Fprintln(os.Stdout, status)
+			}
+		}
+
+		// Check for errors.
+		if errorMsg, ok := msg["error"].(string); ok && errorMsg != "" {
+			return fmt.Errorf("pull error: %s", errorMsg)
+		}
+	}
+	return nil
 }
 
 // BuildImage builds a Docker image from inline Dockerfile.
@@ -293,23 +318,29 @@ func (r *DockerRuntime) BuildImage(ctx context.Context, dockerfileContent string
 	}
 	defer buildResp.Body.Close()
 
-	// Read the build output to check for errors.
-	output, err := io.ReadAll(buildResp.Body)
-	if err != nil {
-		return fmt.Errorf("failed to read build output: %w", err)
-	}
-	
-	// Parse the output to check for errors.
-	lines := strings.Split(string(output), "\n")
-	for _, line := range lines {
-		if line == "" {
-			continue
-		}
+	// Stream build output to stdout while checking for errors.
+	decoder := json.NewDecoder(buildResp.Body)
+	for {
 		var msg map[string]interface{}
-		if err := json.Unmarshal([]byte(line), &msg); err != nil {
-			continue // Skip non-JSON lines.
+		if err := decoder.Decode(&msg); err != nil {
+			if err == io.EOF {
+				break
+			}
+			return fmt.Errorf("failed to decode build output: %w", err)
 		}
-		
+
+		// Display build output stream.
+		if stream, ok := msg["stream"].(string); ok && stream != "" {
+			fmt.Fprint(os.Stdout, stream)
+		}
+
+		// Display aux messages (like image IDs).
+		if aux, ok := msg["aux"].(map[string]interface{}); ok {
+			if id, ok := aux["ID"].(string); ok {
+				fmt.Fprintf(os.Stdout, "Successfully built %s\n", id)
+			}
+		}
+
 		// Check for errors in the build output.
 		if errorDetail, ok := msg["errorDetail"].(map[string]interface{}); ok {
 			if errorMsg, ok := errorDetail["message"].(string); ok {
