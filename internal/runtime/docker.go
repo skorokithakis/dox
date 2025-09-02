@@ -15,6 +15,7 @@ import (
 	"github.com/docker/docker/api/types/filters"
 	"github.com/docker/docker/api/types/network"
 	"github.com/docker/docker/client"
+	"github.com/docker/go-connections/nat"
 	"github.com/docker/docker/pkg/stdcopy"
 	"github.com/sirupsen/logrus"
 	"github.com/skorokithakis/dox/internal/config"
@@ -119,8 +120,22 @@ func (r *DockerRuntime) ExecuteCommand(ctx context.Context, cfg *config.CommandC
 
 	hostConfig := &container.HostConfig{
 		AutoRemove:  true,
-		NetworkMode: container.NetworkMode("host"),
 		Binds:       volumes,
+	}
+
+	// Set network mode if specified.
+	if cfg.Network != "" {
+		hostConfig.NetworkMode = container.NetworkMode(cfg.Network)
+	}
+
+	// Configure port bindings if specified.
+	if len(cfg.Ports) > 0 && cfg.Network != "host" {
+		portBindings, exposedPorts, err := parsePortMappings(cfg.Ports)
+		if err != nil {
+			return 1, fmt.Errorf("failed to parse port mappings: %w", err)
+		}
+		hostConfig.PortBindings = portBindings
+		containerConfig.ExposedPorts = exposedPorts
 	}
 
 	// Set terminal size if TTY is enabled
@@ -365,4 +380,26 @@ func isTerminal() bool {
 	// Both stdin and stdout should be terminals for interactive mode.
 	return (stdinInfo.Mode()&os.ModeCharDevice) != 0 &&
 		(stdoutInfo.Mode()&os.ModeCharDevice) != 0
+}
+
+// parsePortMappings parses port mapping strings and returns Docker port bindings.
+func parsePortMappings(ports []string) (nat.PortMap, nat.PortSet, error) {
+	portBindings := nat.PortMap{}
+	exposedPorts := nat.PortSet{}
+
+	for _, portMapping := range ports {
+		// Parse the port mapping string.
+		// Formats: "8080:80", "127.0.0.1:8080:80", "8080:80/tcp", "8080-8090:8080-8090"
+		mapping, err := nat.ParsePortSpec(portMapping)
+		if err != nil {
+			return nil, nil, fmt.Errorf("invalid port mapping %s: %w", portMapping, err)
+		}
+
+		for _, m := range mapping {
+			exposedPorts[m.Port] = struct{}{}
+			portBindings[m.Port] = []nat.PortBinding{m.Binding}
+		}
+	}
+
+	return portBindings, exposedPorts, nil
 }

@@ -79,7 +79,29 @@ environment:                 # Optional: Environment variables to pass
   - NODE_ENV
   - NPM_TOKEN
 command: node               # Optional: Override the command
+network: bridge             # Optional: Network mode (host, bridge, none, or custom network name)
+ports:                      # Optional: Port mappings (ignored when network is host)
+  - "3000:3000"            # Map host port 3000 to container port 3000
+  - "127.0.0.1:8080:80"    # Bind to specific host IP
 ```
+
+#### Configuration Options
+
+- **image** (required): Docker/Podman image to use
+- **build**: Inline Dockerfile for custom images (see below)
+- **volumes**: Additional volume mounts beyond the automatic current directory mount
+- **environment**: Environment variables to pass from host to container
+- **command**: Override the default command/entrypoint
+- **network**: Network mode for the container
+  - Not specified: Uses Docker/Podman default (typically bridge)
+  - `host`: Container uses host network directly
+  - `bridge`: Container uses bridge network
+  - `none`: No networking
+  - Custom name: Use a custom network
+- **ports**: Port mappings when using bridge or custom networks
+  - Format: `"host_port:container_port"` or `"host_ip:host_port:container_port"`
+  - Supports ranges: `"8000-8010:8000-8010"`
+  - Ignored when using host network
 
 ### Inline Dockerfile Example
 
@@ -151,6 +173,43 @@ Usage:
 ```bash
 dox run node index.js
 dox run node -e "console.log(process.version)"
+```
+
+### Web Server with Port Forwarding
+
+```yaml
+# ~/.config/dox/commands/webserver.yaml
+image: python:3.11-alpine
+network: bridge
+ports:
+  - "8080:8000"  # Access container's port 8000 via localhost:8080
+```
+
+Usage:
+```bash
+# Serve current directory on http://localhost:8080
+dox run webserver python -m http.server 8000
+```
+
+### Database with Host Networking
+
+```yaml
+# ~/.config/dox/commands/postgres.yaml
+image: postgres:15
+network: host  # Use host network directly
+environment:
+  - POSTGRES_PASSWORD
+  - POSTGRES_USER
+  - POSTGRES_DB
+volumes:
+  - ./data:/var/lib/postgresql/data
+```
+
+Usage:
+```bash
+# Postgres will be available on localhost:5432
+export POSTGRES_PASSWORD=secret
+dox run postgres
 ```
 
 ### Go Development

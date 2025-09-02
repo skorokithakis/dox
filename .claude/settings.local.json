@@ -31,7 +31,8 @@
       "Bash(gh repo view:*)",
       "Bash(grep:*)",
       "Bash(go doc:*)",
-      "Bash(podman run:*)"
+      "Bash(podman run:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": [],

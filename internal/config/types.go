@@ -12,6 +12,8 @@ type CommandConfig struct {
 	Volumes     []string          `mapstructure:"volumes" yaml:"volumes"`         // Volume mounts
 	Environment []string          `mapstructure:"environment" yaml:"environment"` // Environment variables to pass through
 	Command     string            `mapstructure:"command" yaml:"command"`         // Optional command override
+	Network     string            `mapstructure:"network" yaml:"network"`         // Network mode (host, bridge, none, or custom network name)
+	Ports       []string          `mapstructure:"ports" yaml:"ports"`             // Port mappings (format: "host:container")
 }
 
 // BuildConfig represents inline Dockerfile build configuration.

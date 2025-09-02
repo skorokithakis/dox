@@ -66,8 +66,17 @@ func (r *PodmanRuntime) ExecuteCommand(ctx context.Context, cfg *config.CommandC
 	podmanArgs = append(podmanArgs, fmt.Sprintf("--env=COLUMNS=%d", width))
 	podmanArgs = append(podmanArgs, fmt.Sprintf("--env=LINES=%d", height))
 
-	// Network mode.
-	podmanArgs = append(podmanArgs, "--network=host")
+	// Network mode - only set if specified.
+	if cfg.Network != "" {
+		podmanArgs = append(podmanArgs, fmt.Sprintf("--network=%s", cfg.Network))
+	}
+
+	// Port mappings - only add if specified and not using host network.
+	if len(cfg.Ports) > 0 && cfg.Network != "host" {
+		for _, port := range cfg.Ports {
+			podmanArgs = append(podmanArgs, "-p", port)
+		}
+	}
 
 	// User mapping.
 	uid := os.Getuid()
