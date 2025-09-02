@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/skorokithakis/dox/compare/v0.1.2...v0.2.0) (2025-09-02)
+
+
+### Features
+
+* Add networking options ([5efe4c9](https://github.com/skorokithakis/dox/commit/5efe4c91717c455b0182f3a976c4d5a2502d50df))
+
 ## [0.1.2](https://github.com/skorokithakis/dox/compare/v0.1.1...v0.1.2) (2025-08-19)
 
 
