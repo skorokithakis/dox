@@ -32,7 +32,8 @@
       "Bash(grep:*)",
       "Bash(go doc:*)",
       "Bash(podman run:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(dox:*)"
     ],
     "deny": [],
     "ask": [],

@@ -280,6 +280,26 @@ Dox runs containers with your host UID/GID. If you encounter permission issues:
 2. Check volume mount permissions
 3. Consider using a custom Dockerfile with proper user setup
 
+**Important caveat for inline Dockerfiles:** When building images with inline Dockerfiles, directories created during the build process are owned by root. Since Dox runs containers as the host user (not root), this can cause permission errors when the application tries to write files.
+
+For example, if you clone a repository or create directories in your Dockerfile, you may need to make them writable:
+
+```yaml
+build:
+  dockerfile_inline: |
+    FROM node:20
+    RUN git clone https://github.com/example/app.git /app
+    WORKDIR /app
+    RUN npm install
+
+    # Make the directory writable by any user since Dox will run as the host user
+    RUN chmod -R 777 /app
+
+    CMD npm run dev
+```
+
+This ensures that when Dox runs the container with your host UID/GID, the application can write temporary files, logs, or other data as needed.
+
 ### Command Not Found
 
 ```
