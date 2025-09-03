@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/skorokithakis/dox/internal/config"
 	"github.com/skorokithakis/dox/internal/runtime"
+	"github.com/skorokithakis/dox/internal/versioning"
 )
 
 // newRunCommand creates the run command.
@@ -56,6 +57,21 @@ func runCommand(cmd *cobra.Command, args []string, upgrade bool) error {
 		return err
 	}
 
+	// Check if the command YAML has changed.
+	versionStore := versioning.NewVersionStore()
+	commandChanged, err := versionStore.HasCommandChanged(command)
+	if err != nil {
+		logrus.Warnf("Failed to check command version: %v", err)
+		// Continue without version checking on error.
+		commandChanged = false
+	}
+	
+	// Force rebuild if the YAML file has changed.
+	if commandChanged && (commandConfig.Build != nil && commandConfig.Build.DockerfileInline != "") {
+		logrus.Infof("Command configuration has changed, rebuilding container...")
+		upgrade = true
+	}
+
 	// Create runtime based on configuration.
 	var rt runtime.Runtime
 	switch globalConfig.Runtime {
@@ -84,6 +100,15 @@ func runCommand(cmd *cobra.Command, args []string, upgrade bool) error {
 	if err != nil {
 		logrus.Errorf("Command execution failed: %v", err)
 		os.Exit(1)
+	}
+
+	// Update the command version after successful execution.
+	// Only update if the command ran successfully and we detected a change or this is the first run.
+	if exitCode == 0 && (commandChanged || upgrade) {
+		if err := versionStore.UpdateCommandVersion(command); err != nil {
+			logrus.Warnf("Failed to update command version: %v", err)
+			// Not a fatal error, continue.
+		}
 	}
 
 	os.Exit(exitCode)

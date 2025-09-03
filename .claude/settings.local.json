@@ -33,7 +33,10 @@
       "Bash(go doc:*)",
       "Bash(podman run:*)",
       "Bash(curl:*)",
-      "Bash(dox:*)"
+      "Bash(dox:*)",
+      "Read(/home/stavros/.config/dox/**)",
+      "Read(/home/stavros/.config/dox/**)",
+      "Bash(jj diff:*)"
     ],
     "deny": [],
     "ask": [],
