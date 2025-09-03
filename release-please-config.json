@@ -3,10 +3,9 @@
   "packages": {
     ".": {
       "release-type": "go",
-      "versioning-strategy": "always-bump-patch",
+      "versioning": "always-bump-patch",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
-      "versioning": "default",
       "extra-files": [
         {
           "type": "generic",
