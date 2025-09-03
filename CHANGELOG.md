@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.0](https://github.com/skorokithakis/dox/compare/v0.2.0...v0.3.0) (2025-09-03)
+
+
+### Features
+
+* Print Docker output when running commands ([798961f](https://github.com/skorokithakis/dox/commit/798961ffcc431a57a8a20890547679464d2b4ab6))
+
+
+### Bug Fixes
+
+* Don't hardcode the workdir ([62a2b59](https://github.com/skorokithakis/dox/commit/62a2b5908e9c8c0f5b5008ec2ec76038abf7cff6))
+
 ## [0.2.0](https://github.com/skorokithakis/dox/compare/v0.1.2...v0.2.0) (2025-09-02)
 
 
