@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/skorokithakis/dox/compare/v0.3.0...v0.3.1) (2025-09-03)
+
+
+### Features
+
+* Add automatic container rebuild on YAML changes ([e9b3324](https://github.com/skorokithakis/dox/commit/e9b33247dc6f2ae17d8c76bd3d50ae6a466d90c5))
+
 ## [0.3.0](https://github.com/skorokithakis/dox/compare/v0.2.0...v0.3.0) (2025-09-03)
 
 
