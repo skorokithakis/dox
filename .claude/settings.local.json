@@ -36,7 +36,8 @@
       "Bash(dox:*)",
       "Read(/home/stavros/.config/dox/**)",
       "Read(/home/stavros/.config/dox/**)",
-      "Bash(jj diff:*)"
+      "Bash(jj diff:*)",
+      "Bash(git tag:*)"
     ],
     "deny": [],
     "ask": [],
