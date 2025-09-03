@@ -334,29 +334,3 @@ make test         # Run tests
 make install      # Install to GOPATH/bin
 make dev          # Build with race detector
 ```
-
-### Project Structure
-
-```
-dox/
-├── cmd/dox/          # Entry point
-├── internal/
-│   ├── cli/          # Command-line interface
-│   ├── config/       # Configuration management
-│   ├── runtime/      # Docker/Podman abstraction
-│   └── utils/        # Utilities
-├── go.mod            # Go modules
-└── Makefile          # Build automation
-```
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit pull requests or open issues.
-
-## License
-
-MIT License - See LICENSE file for details
-
-## Acknowledgments
-
-Based on the RFC specification for containerized command execution. Inspired by the need for clean, reproducible development environments without system pollution.
